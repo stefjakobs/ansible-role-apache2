@@ -1,0 +1,18 @@
+---
+- name: install apache2 worker
+  zypper: name=apache2-worker state=present
+
+- name: remove apache2 prefork
+  zypper: name=apache2-prefork state=absent
+
+- name: activate modules
+  apache2_module: name={{ item }} state=present
+  with_items:
+    - proxy
+    - proxy_fcgi
+    - headers
+    - expires
+    - setenvif
+    - deflate
+  notify: service apache2 restart
+
